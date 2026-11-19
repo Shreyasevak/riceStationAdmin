@@ -52,6 +52,14 @@ type Addon = {
   isActive: boolean;
 };
 
+type Outlet = {
+  id: string;
+  name: string;
+  code: string;
+  city?: string | null;
+  isActive?: boolean;
+};
+
 type MenuData = {
   outlet: {
     id: string;
@@ -63,9 +71,38 @@ type MenuData = {
 };
 
 function ManageMenuContent() {
+
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const outletId = params.id;
+
+  const [outlets, setOutlets] = useState<Outlet[]>([]);
+const [outletsLoading, setOutletsLoading] = useState(true);
+
+useEffect(() => {
+  let isMounted = true;
+
+  async function loadOutlets() {
+    try {
+      const result = await apiRequest("/outlets");
+
+      if (isMounted && result?.success && Array.isArray(result.data)) {
+        setOutlets(result.data.filter((outlet: Outlet) => outlet.isActive !== false));
+      }
+    } catch (error) {
+      console.error("Unable to load outlets:", error);
+    } finally {
+      if (isMounted) setOutletsLoading(false);
+    }
+  }
+
+  loadOutlets();
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
+
 
   const [menu, setMenu] = useState<MenuData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,6 +141,122 @@ const [itemForm, setItemForm] = useState({
   isAvailable: true,
   sortOrder: 0,
 });
+
+
+
+const [showAddonForm, setShowAddonForm] = useState(false);
+const [editingAddonId, setEditingAddonId] = useState<string | null>(null);
+const [addonSaving, setAddonSaving] = useState(false);
+const [addonStatusUpdatingId, setAddonStatusUpdatingId] = useState<string | null>(null);
+
+const [addonForm, setAddonForm] = useState({
+  name: "",
+  description: "",
+  price: "",
+});
+
+function openAddonForm(addon?: Addon) {
+  setActionError("");
+
+  if (addon) {
+    setEditingAddonId(addon.id);
+    setAddonForm({
+      name: addon.name,
+      description: addon.description || "",
+      price: String(addon.price),
+    });
+  } else {
+    setEditingAddonId(null);
+    setAddonForm({
+      name: "",
+      description: "",
+      price: "",
+    });
+  }
+
+  setShowAddonForm(true);
+}
+
+async function handleAddonSubmit(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  setActionError("");
+
+  const price = Number(addonForm.price);
+
+  if (!addonForm.name.trim()) {
+    setActionError("Add-on name is required.");
+    return;
+  }
+
+  if (!Number.isFinite(price) || price < 0 || addonForm.price.trim() === "") {
+    setActionError("Please enter a valid add-on price.");
+    return;
+  }
+
+  setAddonSaving(true);
+
+  try {
+    const endpoint = editingAddonId
+      ? `/outlets/${outletId}/menu/addons/${editingAddonId}`
+      : `/outlets/${outletId}/menu/addons`;
+
+    const result = await apiRequest(endpoint, {
+      method: editingAddonId ? "PATCH" : "POST",
+      body: JSON.stringify({
+        name: addonForm.name.trim(),
+        description: addonForm.description.trim(),
+        price,
+      }),
+    });
+
+    if (!result?.success) {
+      throw new Error(result?.message || "Unable to save add-on.");
+    }
+
+    setShowAddonForm(false);
+    setEditingAddonId(null);
+    await loadMenu();
+  } catch (err) {
+    setActionError(
+      err instanceof Error ? err.message : "Unable to save add-on."
+    );
+  } finally {
+    setAddonSaving(false);
+  }
+}
+
+async function handleAddonStatus(addon: Addon, isActive: boolean) {
+  const action = isActive ? "activate" : "deactivate";
+
+  if (!window.confirm(`Are you sure you want to ${action} "${addon.name}"?`)) {
+    return;
+  }
+
+  setActionError("");
+  setAddonStatusUpdatingId(addon.id);
+
+  try {
+    const result = await apiRequest(
+      `/outlets/${outletId}/menu/addons/${addon.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ isActive }),
+      }
+    );
+
+    if (!result?.success) {
+      throw new Error(result?.message || "Unable to update add-on status.");
+    }
+
+    await loadMenu();
+  } catch (err) {
+    setActionError(
+      err instanceof Error ? err.message : "Unable to update add-on status."
+    );
+  } finally {
+    setAddonStatusUpdatingId(null);
+  }
+}
 
   const loadMenu = useCallback(async () => {
     setLoading(true);
@@ -430,7 +583,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
           )}
         </div>
 
-        <button
+        {/* <button
           type="button"
           onClick={loadMenu}
           disabled={loading}
@@ -441,7 +594,47 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
             className={loading ? "animate-spin" : ""}
           />
           Refresh
-        </button>
+        </button> */}
+        <div className="flex flex-wrap items-center gap-3">
+  <select
+    value={outletId}
+    disabled={outletsLoading}
+    onChange={(event) => {
+      const selectedOutletId = event.target.value;
+
+      if (selectedOutletId && selectedOutletId !== outletId) {
+        router.push(`/outlets/${selectedOutletId}/menu`);
+      }
+    }}
+    className="min-w-[220px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:border-[#245b40]"
+  >
+    <option value={outletId}>
+      {menu?.outlet.name || "Current Outlet"}
+    </option>
+
+    {outlets
+      .filter((outlet) => outlet.id !== outletId)
+      .map((outlet) => (
+        <option key={outlet.id} value={outlet.id}>
+          {outlet.name} ({outlet.code})
+          {outlet.city ? ` - ${outlet.city}` : ""}
+        </option>
+      ))}
+  </select>
+
+  <button
+    type="button"
+    onClick={loadMenu}
+    disabled={loading}
+    className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold hover:bg-slate-50 disabled:opacity-50"
+  >
+    <RefreshCw
+      size={16}
+      className={loading ? "animate-spin" : ""}
+    />
+    Refresh
+  </button>
+</div>
       </header>
 
       <main className="mx-auto max-w-7xl p-5 md:p-8">
@@ -842,40 +1035,76 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
   </>
 )}
 
-              {activeTab === "addons" && (
-                <>
-                  <SectionHeading
-                    title="Menu Add-ons"
-                    description="Manage additional items and their prices."
-                  />
+             
+{activeTab === "addons" && (
+  <>
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <SectionHeading
+        title="Menu Add-ons"
+        description="Add, edit and manage additional items and their prices."
+      />
 
-                  {menu.addons.length === 0 ? (
-                    <EmptyState message="No add-ons found for this outlet." />
-                  ) : (
-                    <div className="divide-y divide-slate-100">
-                      {menu.addons.map((addon) => (
-                        <div
-                          key={addon.id}
-                          className="flex flex-wrap items-center justify-between gap-3 py-4"
-                        >
-                          <div>
-                            <p className="font-semibold">{addon.name}</p>
+      <button
+        type="button"
+        onClick={() => openAddonForm()}
+        className="flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white hover:bg-[#19452f]"
+      >
+        <Plus size={17} />
+        Add Add-on
+      </button>
+    </div>
 
-                            <p className="mt-1 text-sm text-slate-400">
-                              ₹{Number(addon.price).toFixed(2)}
-                              {addon.description
-                                ? ` · ${addon.description}`
-                                : ""}
-                            </p>
-                          </div>
+    {menu.addons.length === 0 ? (
+      <EmptyState message="No add-ons found for this outlet. Click Add Add-on to create one." />
+    ) : (
+      <div className="divide-y divide-slate-100">
+        {menu.addons.map((addon) => (
+          <div
+            key={addon.id}
+            className="flex flex-wrap items-center justify-between gap-4 py-4"
+          >
+            <div>
+              <p className="font-semibold">{addon.name}</p>
 
-                          <Status active={addon.isActive} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
+              <p className="mt-1 text-sm text-slate-400">
+                ₹{Number(addon.price).toFixed(2)}
+                {addon.description ? ` · ${addon.description}` : ""}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Status active={addon.isActive} />
+
+              <button
+                type="button"
+                onClick={() => openAddonForm(addon)}
+                title="Edit Add-on"
+                className="rounded-lg border border-slate-200 p-2 text-[#245b40] hover:bg-slate-50"
+              >
+                <Pencil size={17} />
+              </button>
+
+              <button
+                type="button"
+                disabled={addonStatusUpdatingId === addon.id}
+                onClick={() => handleAddonStatus(addon, !addon.isActive)}
+                title={addon.isActive ? "Deactivate Add-on" : "Activate Add-on"}
+                className="rounded-lg border border-slate-200 p-2 text-[#245b40] hover:bg-slate-50 disabled:opacity-50"
+              >
+                {addonStatusUpdatingId === addon.id ? (
+                  <Loader2 size={17} className="animate-spin" />
+                ) : (
+                  <Power size={17} />
+                )}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </>
+)}
+
             </section>
           </>
         ) : null}
@@ -1167,6 +1396,130 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
     </div>
   </div>
 )}
+
+
+        {showAddonForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 p-4">
+            <div className="my-8 w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+              <div className="mb-5 flex items-center justify-between">
+                <h2 className="text-lg font-bold">
+                  {editingAddonId ? "Edit Add-on" : "Add Add-on"}
+                </h2>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddonForm(false);
+                    setEditingAddonId(null);
+                    setActionError("");
+                  }}
+                  className="rounded-lg p-2 hover:bg-slate-100"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {actionError && (
+                <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                  {actionError}
+                </div>
+              )}
+
+              <form onSubmit={handleAddonSubmit} className="space-y-4">
+                <div>
+                  <label className="mb-2 block text-sm font-semibold">
+                    Add-on Name *
+                  </label>
+
+                  <input
+                    required
+                    value={addonForm.name}
+                    onChange={(event) =>
+                      setAddonForm({
+                        ...addonForm,
+                        name: event.target.value,
+                      })
+                    }
+                    placeholder="Enter add-on name"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-semibold">
+                    Description
+                  </label>
+
+                  <textarea
+                    value={addonForm.description}
+                    onChange={(event) =>
+                      setAddonForm({
+                        ...addonForm,
+                        description: event.target.value,
+                      })
+                    }
+                    rows={3}
+                    placeholder="Enter description"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-semibold">
+                    Price (₹) *
+                  </label>
+
+                  <input
+                    required
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={addonForm.price}
+                    onChange={(event) =>
+                      setAddonForm({
+                        ...addonForm,
+                        price: event.target.value,
+                      })
+                    }
+                    placeholder="Enter add-on price"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 border-t border-slate-100 pt-5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddonForm(false);
+                      setEditingAddonId(null);
+                      setActionError("");
+                    }}
+                    className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={addonSaving}
+                    className="flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+                  >
+                    {addonSaving && (
+                      <Loader2 size={16} className="animate-spin" />
+                    )}
+                    {addonSaving
+                      ? "Saving..."
+                      : editingAddonId
+                        ? "Update Add-on"
+                        : "Save Add-on"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+
 
         <footer className="py-7 text-center text-xs text-slate-400">
           © 2026 ByteBill. All rights reserved.

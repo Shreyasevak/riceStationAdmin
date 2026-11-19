@@ -167,16 +167,12 @@ export default function DashboardPage() {
             {navigation.map((item) => (
               <a
                 key={item.label}
-                href={
-  item.label === "Dashboard"
-    ? "/"
-    : item.label === "Orders"
-      ? "/orders"
-      : item.label === "Outlets"
-        ? "/outlets"
-        : item.label === "Table Management"
-          ? "/tables"
-          : "#"
+               href={
+  item.label === "Dashboard" ? "/" :
+  item.label === "Orders" ? "/orders" :
+  item.label === "Menu Management" ? "/menu" :
+  item.label === "Outlets" ? "/outlets" :
+  item.label === "Table Management" ? "/tables" : "#"
 }
                 className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${
                   item.label === "Dashboard"
