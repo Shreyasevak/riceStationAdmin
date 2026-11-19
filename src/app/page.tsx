@@ -174,6 +174,7 @@ export default function DashboardPage() {
   item.label === "Table Management" ? "/tables" :
   item.label === "User Management" ? "/users" :
   item.label === "Outlets" ? "/outlets" :
+  item.label === "Payments" ? "/payments" :
   item.label === "Reports & Analytics" ? "/reports" : "#"
 }
                 className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${
