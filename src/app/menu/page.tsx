@@ -46,7 +46,18 @@ export default function MenuPage() {
         }
 
         // Open the existing menu manager for the first outlet.
-        router.replace(`/outlets/${outlets[0].id}/menu`);
+        // Use Dashboard-selected outlet, otherwise use the first active outlet.
+const params = new URLSearchParams(window.location.search);
+const dashboardOutletId = params.get("outletId");
+
+const selectedOutlet = dashboardOutletId
+  ? outlets.find((outlet) => outlet.id === dashboardOutletId)
+  : null;
+
+const targetOutlet = selectedOutlet || outlets[0];
+
+router.replace(`/outlets/${targetOutlet.id}/menu`);
+        // router.replace(`/outlets/${outlets[0].id}/menu`);
       } catch (err) {
         if (mounted) {
           setError(

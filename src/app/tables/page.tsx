@@ -122,13 +122,21 @@ export default function TablesPage() {
         setIsSuperAdmin(true);
         setOutlets(outletResult.data);
 
-        const currentSelection =
-          selectedOutletId &&
-          activeOutlets.some(
-            (outlet: Outlet) => outlet.id === selectedOutletId
-          )
-            ? selectedOutletId
-            : activeOutlets[0]?.id || "";
+       const params = new URLSearchParams(window.location.search);
+const dashboardOutletId = params.get("outletId");
+
+const currentSelection =
+  dashboardOutletId &&
+  activeOutlets.some(
+    (outlet: Outlet) => outlet.id === dashboardOutletId
+  )
+    ? dashboardOutletId
+    : selectedOutletId &&
+      activeOutlets.some(
+        (outlet: Outlet) => outlet.id === selectedOutletId
+      )
+    ? selectedOutletId
+    : activeOutlets[0]?.id || "";
 
         setSelectedOutletId(currentSelection);
 

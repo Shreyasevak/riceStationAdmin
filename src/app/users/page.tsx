@@ -126,10 +126,17 @@ export default function UsersPage() {
     }
   }
 
-  useEffect(() => {
-    loadUsers();
-    loadOutlets();
-  }, []);
+ useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const outletId = params.get("outletId");
+
+  if (outletId) {
+    setOutletFilter(outletId);
+  }
+
+  loadUsers();
+  loadOutlets();
+}, []);
 
   const filteredUsers = useMemo(() => {
     return users.filter((user) => {
@@ -156,8 +163,8 @@ export default function UsersPage() {
     });
   }, [users, search, roleFilter, statusFilter, outletFilter]);
 
-  const activeCount = users.filter((user) => user.isActive).length;
-  const inactiveCount = users.length - activeCount;
+const activeCount = filteredUsers.filter((user) => user.isActive).length;
+const inactiveCount = filteredUsers.length - activeCount;
 
   function openAddForm() {
     setEditingId(null);
@@ -346,7 +353,7 @@ export default function UsersPage() {
           <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">Total Users</p>
             <p className="mt-2 text-3xl font-bold">
-              {loading ? "—" : users.length}
+              {loading ? "—" : filteredUsers.length}
             </p>
           </div>
 

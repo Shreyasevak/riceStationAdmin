@@ -55,6 +55,8 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [outlets, setOutlets] = useState<Outlet[]>([]);
+  const [selectedOutletId, setSelectedOutletId] = useState("ALL");
+const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -77,6 +79,13 @@ export default function DashboardPage() {
       }
 
       setOutlets(result.data);
+
+      const payload = JSON.parse(
+  atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+);
+
+setIsSuperAdmin(payload.role === "SUPER_ADMIN");
+
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Unable to load dashboard.";
@@ -99,50 +108,85 @@ export default function DashboardPage() {
     loadDashboard();
   }, []);
 
-  const totalUsers = outlets.reduce(
-    (sum, outlet) => sum + outlet._count.users,
-    0,
-  );
-  const totalTables = outlets.reduce(
-    (sum, outlet) => sum + outlet._count.tables,
-    0,
-  );
-  const totalOrders = outlets.reduce(
-    (sum, outlet) => sum + outlet._count.orders,
-    0,
-  );
-  const totalMenuItems = outlets.reduce(
-    (sum, outlet) => sum + outlet._count.menuItems,
-    0,
-  );
-  const activeOutlets = outlets.filter((outlet) => outlet.isActive).length;
+  const filteredOutlets =
+  selectedOutletId === "ALL"
+    ? outlets
+    : outlets.filter((outlet) => outlet.id === selectedOutletId);
 
-  const stats = [
-    {
-      title: "Total Outlets",
-      value: outlets.length,
-      icon: Store,
-      color: "bg-emerald-50 text-emerald-700",
-    },
-    {
-      title: "Total Users",
-      value: totalUsers,
-      icon: Users,
-      color: "bg-blue-50 text-blue-700",
-    },
-    {
-      title: "Total Tables",
-      value: totalTables,
-      icon: Table2,
-      color: "bg-violet-50 text-violet-700",
-    },
-    {
-      title: "Total Orders",
-      value: totalOrders,
-      icon: ShoppingBag,
-      color: "bg-amber-50 text-amber-700",
-    },
-  ];
+    const totalUsers = filteredOutlets.reduce(
+  (sum, outlet) => sum + outlet._count.users,
+  0
+);
+
+const totalTables = filteredOutlets.reduce(
+  (sum, outlet) => sum + outlet._count.tables,
+  0
+);
+
+const totalOrders = filteredOutlets.reduce(
+  (sum, outlet) => sum + outlet._count.orders,
+  0
+);
+
+const totalMenuItems = filteredOutlets.reduce(
+  (sum, outlet) => sum + outlet._count.menuItems,
+  0
+);
+
+const activeOutlets = filteredOutlets.filter(
+  (outlet) => outlet.isActive
+).length;
+
+  // const totalUsers = outlets.reduce(
+  //   (sum, outlet) => sum + outlet._count.users,
+  //   0,
+  // );
+  // const totalTables = outlets.reduce(
+  //   (sum, outlet) => sum + outlet._count.tables,
+  //   0,
+  // );
+  // const totalOrders = outlets.reduce(
+  //   (sum, outlet) => sum + outlet._count.orders,
+  //   0,
+  // );
+  // const totalMenuItems = outlets.reduce(
+  //   (sum, outlet) => sum + outlet._count.menuItems,
+  //   0,
+  // );
+  // const activeOutlets = outlets.filter((outlet) => outlet.isActive).length;
+
+  
+const stats = [
+  {
+    title: "Total Outlets",
+    value: filteredOutlets.length,
+    icon: Store,
+    color: "bg-emerald-50 text-emerald-700",
+    href: "/outlets",
+  },
+  {
+    title: "Total Users",
+    value: totalUsers,
+    icon: Users,
+    color: "bg-blue-50 text-blue-700",
+    href: "/users",
+  },
+  {
+    title: "Total Tables",
+    value: totalTables,
+    icon: Table2,
+    color: "bg-violet-50 text-violet-700",
+    href: "/tables",
+  },
+  {
+    title: "Total Orders",
+    value: totalOrders,
+    icon: ShoppingBag,
+    color: "bg-amber-50 text-amber-700",
+    href: "/orders",
+  },
+];
+
 
   return (
     <div className="min-h-screen bg-[#f6f8f7] text-slate-800">
@@ -253,9 +297,28 @@ export default function DashboardPage() {
                 Here's your ByteBill platform overview.
               </p>
             </div>
-            <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium shadow-sm">
+            {/* <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium shadow-sm">
               <CalendarDays size={17} /> All Outlets
-            </div>
+            </div> */}
+            {isSuperAdmin && (
+  <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
+    <Store size={17} className="text-[#245b40]" />
+
+    <select
+      value={selectedOutletId}
+      onChange={(e) => setSelectedOutletId(e.target.value)}
+      className="bg-transparent text-sm font-medium text-slate-700 outline-none"
+    >
+      <option value="ALL">All Outlets</option>
+
+      {outlets.map((outlet) => (
+        <option key={outlet.id} value={outlet.id}>
+          {outlet.name}
+        </option>
+      ))}
+    </select>
+  </div>
+)}
           </div>
 
           {error && (
@@ -271,11 +334,21 @@ export default function DashboardPage() {
           )}
 
           <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {stats.map((stat) => (
-              <div
-                key={stat.title}
-                className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
-              >
+           {stats.map((stat) => (
+  <button
+    key={stat.title}
+    type="button"
+    onClick={() => {
+  const query =
+    selectedOutletId === "ALL"
+      ? ""
+      : `?outletId=${encodeURIComponent(selectedOutletId)}`;
+
+  router.push(`${stat.href}${query}`);
+}}
+    // onClick={() => router.push(stat.href)}
+    className="w-full cursor-pointer rounded-2xl border border-slate-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#245b40]"
+  >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-500">{stat.title}</span>
                   <span className={`rounded-xl p-2.5 ${stat.color}`}>
@@ -291,7 +364,7 @@ export default function DashboardPage() {
                     )}
                   </h4>
                 </div>
-              </div>
+              </button>
             ))}
           </section>
 

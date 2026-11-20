@@ -145,13 +145,21 @@ export default function OrdersPage() {
     }
   }
 
-  useEffect(() => {
-    if (!sessionStorage.getItem("bytebill_token")) {
-      router.replace("/login");
-      return;
-    }
-    loadOutlets();
-  }, []);
+useEffect(() => {
+  if (!sessionStorage.getItem("bytebill_token")) {
+    router.replace("/login");
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const selectedOutlet = params.get("outletId");
+
+  if (selectedOutlet) {
+    setOutletId(selectedOutlet);
+  }
+
+  loadOutlets();
+}, []);
 
   useEffect(() => {
     if (!sessionStorage.getItem("bytebill_token")) return;

@@ -36,6 +36,7 @@ export default function OutletsPage() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
+  const [selectedOutletId, setSelectedOutletId] = useState("ALL");
 
   async function loadOutlets() {
     setLoading(true);
@@ -71,8 +72,15 @@ export default function OutletsPage() {
   }
 
   useEffect(() => {
-    loadOutlets();
-  }, []);
+  const params = new URLSearchParams(window.location.search);
+  const outletId = params.get("outletId");
+
+  if (outletId) {
+    setSelectedOutletId(outletId);
+  }
+
+  loadOutlets();
+}, []);
 
   const filteredOutlets = useMemo(() => {
     return outlets.filter((outlet) => {
@@ -85,12 +93,15 @@ export default function OutletsPage() {
         filter === "ALL" ||
         (filter === "ACTIVE" && outlet.isActive) ||
         (filter === "INACTIVE" && !outlet.isActive);
+        
+        const matchesOutlet =
+  selectedOutletId === "ALL" || outlet.id === selectedOutletId;
 
-      return matchesSearch && matchesStatus;
+      return matchesSearch && matchesStatus && matchesOutlet;
     });
-  }, [outlets, search, filter]);
+  }, [outlets, search, filter, selectedOutletId]);
 
-  const activeCount = outlets.filter((o) => o.isActive).length;
+  const activeCount = filteredOutlets.filter((o) => o.isActive).length;
 
   return (
     <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
@@ -126,7 +137,7 @@ export default function OutletsPage() {
         <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">Total Outlets</p>
-            <p className="mt-2 text-3xl font-bold">{loading ? "—" : outlets.length}</p>
+            <p className="mt-2 text-3xl font-bold">{loading ? "—" : filteredOutlets.length}</p>
           </div>
           <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">Active Outlets</p>
@@ -134,7 +145,7 @@ export default function OutletsPage() {
           </div>
           <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-500">Inactive Outlets</p>
-            <p className="mt-2 text-3xl font-bold text-red-600">{loading ? "—" : outlets.length - activeCount}</p>
+            <p className="mt-2 text-3xl font-bold text-red-600">{loading ? "—" : filteredOutlets.length - activeCount}</p>
           </div>
         </div>
 
