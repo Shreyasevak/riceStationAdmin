@@ -23,6 +23,7 @@ import {
   CalendarDays,
   Loader2,
   RefreshCw,
+  LogOut,
 } from "lucide-react";
 import { apiRequest } from "@/services/api";
 
@@ -56,9 +57,10 @@ export default function DashboardPage() {
 
   const [outlets, setOutlets] = useState<Outlet[]>([]);
   const [selectedOutletId, setSelectedOutletId] = useState("ALL");
-const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   async function loadDashboard() {
     setLoading(true);
@@ -137,25 +139,6 @@ const activeOutlets = filteredOutlets.filter(
   (outlet) => outlet.isActive
 ).length;
 
-  // const totalUsers = outlets.reduce(
-  //   (sum, outlet) => sum + outlet._count.users,
-  //   0,
-  // );
-  // const totalTables = outlets.reduce(
-  //   (sum, outlet) => sum + outlet._count.tables,
-  //   0,
-  // );
-  // const totalOrders = outlets.reduce(
-  //   (sum, outlet) => sum + outlet._count.orders,
-  //   0,
-  // );
-  // const totalMenuItems = outlets.reduce(
-  //   (sum, outlet) => sum + outlet._count.menuItems,
-  //   0,
-  // );
-  // const activeOutlets = outlets.filter((outlet) => outlet.isActive).length;
-
-  
 const stats = [
   {
     title: "Total Outlets",
@@ -254,40 +237,61 @@ const stats = [
       </aside>
 
       <main className="min-h-screen lg:ml-64">
-        <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b border-slate-200 bg-white/95 px-5 backdrop-blur md:px-8">
-          <div>
-            <p className="text-xs text-slate-400">Pages / Dashboard</p>
-            <h2 className="text-xl font-bold text-slate-800">
-              Dashboard Overview
-            </h2>
-          </div>
+       <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b border-slate-200 bg-white/95 px-5 backdrop-blur md:px-8">
+  <div>
+    <p className="text-xs text-slate-400">Pages / Dashboard</p>
+    <h2 className="text-xl font-bold text-slate-800">
+      Dashboard Overview
+    </h2>
+  </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              aria-label="Search"
-              className="hidden rounded-xl border border-slate-200 p-2.5 text-slate-500 sm:block"
-            >
-              <Search size={19} />
-            </button>
-            <button
-              aria-label="Refresh dashboard"
-              onClick={loadDashboard}
-              className="rounded-xl border border-slate-200 p-2.5 text-slate-500 hover:bg-slate-50"
-            >
-              <RefreshCw size={19} />
-            </button>
-            <div className="flex items-center gap-2 border-l border-slate-200 pl-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#e3efdc] font-bold text-[#24533b]">
-                A
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-sm font-semibold">Administrator</p>
-                <p className="text-xs text-slate-400">Super Admin</p>
-              </div>
-              <ChevronDown size={16} className="text-slate-400" />
-            </div>
-          </div>
-        </header>
+  <div className="flex items-center gap-3">
+
+    <button
+      aria-label="Refresh dashboard"
+      onClick={loadDashboard}
+      className="rounded-xl border border-slate-200 p-2.5 text-slate-500 hover:bg-slate-50"
+    >
+      <RefreshCw size={19} />
+    </button>
+
+    <div className="relative border-l border-slate-200 pl-3">
+      <button
+        type="button"
+        onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+        className="flex items-center gap-2"
+      >
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#e3efdc] font-bold text-[#24533b]">
+          A
+        </div>
+
+        <div className="hidden text-left sm:block">
+          <p className="text-sm font-semibold">Administrator</p>
+          <p className="text-xs text-slate-400">Super Admin</p>
+        </div>
+
+        <ChevronDown size={16} className="text-slate-400" />
+      </button>
+
+      {profileMenuOpen && (
+        <div className="absolute right-0 top-12 z-50 w-52 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.removeItem("bytebill_token");
+              setProfileMenuOpen(false);
+              router.replace("/login");
+            }}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
+          >
+            <LogOut size={17} />
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+</header>
 
         <div className="p-5 md:p-8">
           <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
@@ -297,9 +301,6 @@ const stats = [
                 Here's your ByteBill platform overview.
               </p>
             </div>
-            {/* <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium shadow-sm">
-              <CalendarDays size={17} /> All Outlets
-            </div> */}
             {isSuperAdmin && (
   <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
     <Store size={17} className="text-[#245b40]" />
@@ -346,7 +347,6 @@ const stats = [
 
   router.push(`${stat.href}${query}`);
 }}
-    // onClick={() => router.push(stat.href)}
     className="w-full cursor-pointer rounded-2xl border border-slate-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#245b40]"
   >
                 <div className="flex items-center justify-between">
