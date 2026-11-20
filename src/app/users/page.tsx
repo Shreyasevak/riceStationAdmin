@@ -318,12 +318,12 @@ const inactiveCount = filteredUsers.length - activeCount;
   }
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-5 md:px-8">
         <div>
           <button
             onClick={() => router.push("/")}
-            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Dashboard
           </button>
@@ -341,7 +341,7 @@ const inactiveCount = filteredUsers.length - activeCount;
 
           <button
             onClick={openAddForm}
-            className="flex items-center gap-2 rounded-xl bg-[#174b34] px-4 py-3 text-sm font-semibold text-white hover:bg-[#246342]"
+            className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-3 text-sm font-semibold text-white hover:bg-brand-button/90"
           >
             <Plus size={18} /> Add User
           </button>
@@ -472,7 +472,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                     <tr key={user.id} className="transition hover:bg-slate-50">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f0e6] text-[#245b40]">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-highlight/10 text-brand-primary">
                             <Users size={19} />
                           </div>
                           <div>
@@ -490,7 +490,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                       </td>
 
                       <td className="px-5 py-4">
-                        <span className="rounded-full bg-[#e8f0e6] px-3 py-1 text-xs font-semibold text-[#245b40]">
+                        <span className="rounded-full bg-brand-highlight/10 px-3 py-1 text-xs font-semibold text-brand-primary">
                           {user.role.replace("_", " ")}
                         </span>
                       </td>
@@ -515,7 +515,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => openEditForm(user)}
-                            className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-[#e8f0e6] hover:text-[#245b40]"
+                            className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-brand-highlight/10 hover:text-brand-primary"
                             title="Edit user"
                           >
                             <Pencil size={16} />
@@ -588,7 +588,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="Enter full name"
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 />
               </div>
 
@@ -600,7 +600,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="user@example.com"
-                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
 
@@ -610,7 +610,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     placeholder="Mobile number"
-                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
               </div>
@@ -629,7 +629,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                     placeholder="Minimum 8 characters"
-                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
               )}
@@ -641,7 +641,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                   onChange={(e) =>
                     setForm({ ...form, role: e.target.value as UserRole })
                   }
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 >
                   {roles.map((role) => (
                     <option key={role} value={role}>
@@ -656,7 +656,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                 <select
                   value={form.outletId}
                   onChange={(e) => setForm({ ...form, outletId: e.target.value })}
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 >
                   <option value="">Use account's default outlet / no outlet</option>
                   {outlets
@@ -681,7 +681,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 rounded-xl bg-[#174b34] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#246342] disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:opacity-60"
                 >
                   {saving && <Loader2 size={16} className="animate-spin" />}
                   {editingId ? "Update User" : "Create User"}
@@ -720,7 +720,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Minimum 8 characters"
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 />
               </div>
 
@@ -736,7 +736,7 @@ const inactiveCount = filteredUsers.length - activeCount;
                 <button
                   type="submit"
                   disabled={passwordSaving}
-                  className="flex items-center gap-2 rounded-xl bg-[#174b34] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#246342] disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:opacity-60"
                 >
                   {passwordSaving && <Loader2 size={16} className="animate-spin" />}
                   Update Password

@@ -388,13 +388,13 @@ function exportPDF() {
       label: "GST / Tax",
       value: formatCurrency(totals?.tax || 0),
       icon: Receipt,
-      color: "bg-blue-50 text-blue-700",
+      color: "bg-brand-highlight/10 text-brand-primary",
     },
     {
       label: "Paid Orders",
       value: String(totals?.orderCount || 0),
       icon: ShoppingBag,
-      color: "bg-violet-50 text-violet-700",
+      color: "bg-brand-accent/10 text-brand-accent",
     },
     {
       label: "Royalty Payable",
@@ -405,12 +405,12 @@ function exportPDF() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex flex-col justify-between gap-4 border-b border-slate-200 bg-white px-5 py-5 md:flex-row md:items-center md:px-8">
         <div>
           <button
             onClick={() => router.push("/")}
-            className="mb-2 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-2 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Dashboard
           </button>
@@ -446,7 +446,7 @@ function exportPDF() {
   <button
     onClick={exportExcel}
     disabled={!report || loading}
-    className="flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-800 disabled:opacity-50"
+    className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:opacity-50"
   >
     <Download size={17} /> Excel
   </button>
@@ -454,7 +454,7 @@ function exportPDF() {
   <button
     onClick={exportPDF}
     disabled={!report || loading}
-    className="flex items-center gap-2 rounded-xl bg-[#174b34] px-4 py-3 text-sm font-semibold text-white hover:bg-[#246342] disabled:opacity-50"
+    className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:opacity-50"
   >
     <Download size={17} /> PDF
   </button>
@@ -466,14 +466,14 @@ function exportPDF() {
       <div className="space-y-6 p-5 md:p-8">
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
-            <CalendarDays size={19} className="text-[#245b40]" />
+            <CalendarDays size={19} className="text-brand-primary" />
             <h2 className="font-bold">Report Filters</h2>
           </div>
 
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => applyMonth(0)}
-              className="rounded-lg bg-[#174b34] px-4 py-2 text-sm font-medium text-white"
+              className="rounded-lg bg-brand-button px-4 py-2 text-sm font-medium text-white"
             >
               This Month
             </button>
@@ -495,7 +495,7 @@ function exportPDF() {
                 value={startDate}
                 max={endDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
               />
             </div>
 
@@ -509,7 +509,7 @@ function exportPDF() {
                 min={startDate}
                 max={today}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
               />
             </div>
 
@@ -522,7 +522,7 @@ function exportPDF() {
                 <select
                   value={outletId}
                   onChange={(e) => setOutletId(e.target.value)}
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 >
                   <option value="ALL">All Outlets</option>
                   {outlets.map((outlet) => (
@@ -538,7 +538,7 @@ function exportPDF() {
               <button
                 onClick={loadReport}
                 disabled={!startDate || !endDate || startDate > endDate || loading}
-                className="h-11 w-full rounded-xl bg-[#e8f0e6] px-4 text-sm font-semibold text-[#245b40] hover:bg-[#dce9d9] disabled:opacity-50"
+                className="h-11 w-full rounded-xl bg-brand-highlight/10 px-4 text-sm font-semibold text-brand-primary hover:bg-brand-highlight/20 disabled:opacity-50"
               >
                 Apply Filters
               </button>
@@ -620,11 +620,11 @@ function exportPDF() {
               {report?.royaltyRate ?? 4}%
             </p>
 
-            <div className="mt-5 rounded-xl bg-[#e8f0e6] p-4">
-              <p className="text-sm font-medium text-[#245b40]">
+            <div className="mt-5 rounded-xl bg-brand-highlight/10 p-4">
+              <p className="text-sm font-medium text-brand-primary">
                 Total Royalty Payable
               </p>
-              <p className="mt-2 text-3xl font-bold text-[#174b34]">
+              <p className="mt-2 text-3xl font-bold text-brand-primary">
                 {loading
                   ? "—"
                   : formatCurrency(totals?.royaltyAmount || 0)}
@@ -689,7 +689,7 @@ function exportPDF() {
                       </td>
                       <td className="px-5 py-4">{formatCurrency(item.tax)}</td>
                       <td className="px-5 py-4">{item.royaltyRate}%</td>
-                      <td className="px-5 py-4 font-bold text-[#245b40]">
+                      <td className="px-5 py-4 font-bold text-brand-primary">
                         {formatCurrency(item.royaltyAmount)}
                       </td>
                     </tr>
@@ -707,7 +707,7 @@ function exportPDF() {
                     <td className="px-5 py-4">{formatCurrency(totals?.netSales || 0)}</td>
                     <td className="px-5 py-4">{formatCurrency(totals?.tax || 0)}</td>
                     <td className="px-5 py-4">{report.royaltyRate}%</td>
-                    <td className="px-5 py-4 text-[#245b40]">
+                    <td className="px-5 py-4 text-brand-primary">
                       {formatCurrency(totals?.royaltyAmount || 0)}
                     </td>
                   </tr>

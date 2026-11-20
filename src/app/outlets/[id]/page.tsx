@@ -100,13 +100,13 @@ function OutletDetailsContent() {
           title: "Total Users",
           value: outlet._count.users,
           icon: Users,
-          color: "bg-blue-50 text-blue-700",
+          color: "bg-brand-highlight/10 text-brand-primary",
         },
         {
           title: "Restaurant Tables",
           value: outlet._count.tables,
           icon: Table2,
-          color: "bg-violet-50 text-violet-700",
+          color: "bg-brand-accent/10 text-brand-accent",
         },
         {
           title: "Total Orders",
@@ -156,12 +156,12 @@ function OutletDetailsContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <div className="min-h-screen bg-page-background text-brand-primary">
       <header className="sticky top-0 z-10 flex min-h-20 items-center justify-between border-b border-slate-200 bg-white px-5 py-4 md:px-8">
         <div>
           <button
             onClick={() => router.push("/outlets")}
-            className="mb-2 flex items-center gap-2 text-sm text-slate-400 hover:text-[#245b40]"
+            className="mb-2 flex items-center gap-2 text-sm text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={16} />
             Back to Outlets
@@ -172,7 +172,7 @@ function OutletDetailsContent() {
        <div className="flex flex-wrap items-center gap-2">
   <button
     onClick={() => router.push(`/outlets/${outletId}/menu`)}
-    className="flex items-center gap-2 rounded-xl bg-[#245b40] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#19452f]"
+    className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-button/90"
   >
     <Utensils size={17} />
     Manage Menu
@@ -221,7 +221,7 @@ function OutletDetailsContent() {
             <section className="mb-6 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e6f0e7] text-[#245b40]">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-highlight/10 text-brand-primary">
                     <Store size={30} />
                   </div>
 
@@ -342,8 +342,8 @@ export default function OutletDetailsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[#f6f8f7]">
-          <Loader2 className="animate-spin text-[#245b40]" size={28} />
+        <div className="flex min-h-screen items-center justify-center bg-page-background">
+          <Loader2 className="animate-spin text-brand-primary" size={28} />
         </div>
       }
     >

@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { apiRequest } from "@/services/api";
 import { Eye, EyeOff, LockKeyhole, Mail, Loader2 } from "lucide-react";
 
@@ -65,46 +66,51 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f4f7f4] px-4 py-10">
+    <main className="flex min-h-screen items-center justify-center bg-page-background px-4 py-10">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-xl lg:grid-cols-2">
 
-        <section className="hidden flex-col justify-between bg-[#123b2b] p-12 text-white lg:flex">
+        <section className="hidden flex-col justify-between bg-brand-primary p-12 text-white lg:flex">
           <div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#d9edbb] text-2xl font-black text-[#123b2b]">
-                B
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold tracking-wider">BYTEBILL</h1>
-                <p className="text-xs tracking-[4px] text-emerald-200">ADMIN PANEL</p>
-              </div>
+            <div className="w-full rounded-xl bg-white px-2 py-1">
+              <Image
+                src="/bytebill-logo-cropped.png"
+                alt="Bitebill"
+                width={1469}
+                height={402}
+                className="h-auto w-full"
+              />
             </div>
 
             <div className="mt-24">
               <h2 className="text-4xl font-bold leading-tight">
                 Manage your restaurant business with confidence.
               </h2>
-              <p className="mt-5 max-w-sm leading-7 text-emerald-100/70">
+              <p className="mt-5 max-w-sm leading-7 text-brand-highlight/70">
                 Manage orders, menus, tables, payments and reports from one
                 centralized dashboard.
               </p>
             </div>
           </div>
 
-          <p className="text-sm text-emerald-100/50">
+          <footer className="text-sm text-brand-highlight/50">
             © 2026 ByteBill. All rights reserved.
-          </p>
+          </footer>
         </section>
 
         <section className="flex items-center justify-center px-7 py-12 sm:px-12">
           <div className="w-full max-w-md">
             <div className="mb-9 lg:hidden">
-              <h1 className="text-2xl font-bold text-[#123b2b]">BYTEBILL</h1>
-              <p className="text-xs tracking-[3px] text-slate-500">ADMIN PANEL</p>
+              <Image
+                src="/bytebill-logo-cropped.png"
+                alt="Bitebill"
+                width={1469}
+                height={402}
+                className="h-auto w-56"
+              />
             </div>
 
-            <p className="text-sm font-semibold text-[#39714e]">WELCOME BACK</p>
-            <h2 className="mt-2 text-3xl font-bold text-slate-800">
+            <p className="text-sm font-semibold text-brand-button">WELCOME BACK</p>
+            <h2 className="mt-2 text-3xl font-bold text-brand-primary">
               Admin Login
             </h2>
             <p className="mt-2 text-sm text-slate-500">
@@ -116,7 +122,7 @@ export default function LoginPage() {
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   Email or mobile number
                 </label>
-                <div className="flex items-center rounded-xl border border-slate-200 px-4 focus-within:border-[#39714e]">
+                <div className="flex items-center rounded-xl border border-slate-200 px-4 focus-within:border-brand-button">
                   <Mail size={18} className="text-slate-400" />
                   <input
                     type="text"
@@ -134,7 +140,7 @@ export default function LoginPage() {
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   Password
                 </label>
-                <div className="flex items-center rounded-xl border border-slate-200 px-4 focus-within:border-[#39714e]">
+                <div className="flex items-center rounded-xl border border-slate-200 px-4 focus-within:border-brand-button">
                   <LockKeyhole size={18} className="text-slate-400" />
                   <input
                     type={showPassword ? "text" : "password"}
@@ -165,7 +171,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#174b34] font-semibold text-white transition hover:bg-[#246342] disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-button font-semibold text-white transition hover:bg-brand-button/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
                   <>

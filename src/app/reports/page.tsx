@@ -316,12 +316,12 @@ useEffect(() => {
   );
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex flex-col justify-between gap-4 border-b border-slate-200 bg-white px-5 py-5 md:flex-row md:items-center md:px-8">
         <div>
           <button
             onClick={() => router.push("/")}
-            className="mb-2 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-2 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Dashboard
           </button>
@@ -344,7 +344,7 @@ useEffect(() => {
           <button
             onClick={exportCSV}
             disabled={!report || loading}
-            className="flex items-center gap-2 rounded-xl bg-[#174b34] px-4 py-3 text-sm font-semibold text-white hover:bg-[#246342] disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:opacity-50"
           >
             <Download size={17} /> Export CSV
           </button>
@@ -354,7 +354,7 @@ useEffect(() => {
       <div className="space-y-6 p-5 md:p-8">
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
-            <CalendarDays size={19} className="text-[#245b40]" />
+            <CalendarDays size={19} className="text-brand-primary" />
             <h2 className="font-bold">Report Filters</h2>
           </div>
 
@@ -370,7 +370,7 @@ useEffect(() => {
                 onClick={() => applyPreset(value)}
                 className={`rounded-lg px-4 py-2 text-sm font-medium ${
                   preset === value
-                    ? "bg-[#174b34] text-white"
+                    ? "bg-brand-button text-white"
                     : "border border-slate-200 text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -392,7 +392,7 @@ useEffect(() => {
                   setStartDate(e.target.value);
                   setPreset("CUSTOM");
                 }}
-                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
               />
             </div>
 
@@ -409,7 +409,7 @@ useEffect(() => {
                   setEndDate(e.target.value);
                   setPreset("CUSTOM");
                 }}
-                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
               />
             </div>
 
@@ -422,7 +422,7 @@ useEffect(() => {
                 <select
                   value={outletId}
                   onChange={(e) => setOutletId(e.target.value)}
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#245b40]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 >
                   <option value="ALL">All Outlets</option>
                   {outlets.map((outlet) => (
@@ -438,7 +438,7 @@ useEffect(() => {
               <button
                 onClick={applyCustomDate}
                 disabled={!startDate || !endDate || startDate > endDate}
-                className="h-11 w-full rounded-xl bg-[#e8f0e6] px-4 text-sm font-semibold text-[#245b40] hover:bg-[#dce9d9] disabled:opacity-50"
+                className="h-11 w-full rounded-xl bg-brand-highlight/10 px-4 text-sm font-semibold text-brand-primary hover:bg-brand-highlight/20 disabled:opacity-50"
               >
                 Apply Filters
               </button>
@@ -472,13 +472,13 @@ useEffect(() => {
               label: "Paid Orders",
               value: String(summary?.totalOrders || 0),
               icon: ShoppingBag,
-              color: "bg-blue-50 text-blue-700",
+              color: "bg-brand-highlight/10 text-brand-primary",
             },
             {
               label: "Average Order Value",
               value: formatCurrency(summary?.averageOrderValue || 0),
               icon: TrendingUp,
-              color: "bg-violet-50 text-violet-700",
+              color: "bg-brand-accent/10 text-brand-accent",
             },
             {
               label: "Total Discount",
@@ -522,7 +522,7 @@ useEffect(() => {
 
     {loading ? (
       <div className="flex h-72 items-center justify-center">
-        <Loader2 className="animate-spin text-[#245b40]" />
+        <Loader2 className="animate-spin text-brand-primary" />
       </div>
     ) : (
       <ResponsiveContainer width="100%" height={280}>
@@ -549,7 +549,7 @@ useEffect(() => {
           <Bar
             dataKey="revenue"
             name="Revenue"
-            fill="#245b40"
+            fill="#1769FF"
             radius={[5, 5, 0, 0]}
           />
         </BarChart>
@@ -568,7 +568,7 @@ useEffect(() => {
 
     {loading ? (
       <div className="flex h-72 items-center justify-center">
-        <Loader2 className="animate-spin text-[#245b40]" />
+        <Loader2 className="animate-spin text-brand-primary" />
       </div>
     ) : (
       <ResponsiveContainer width="100%" height={280}>
@@ -595,7 +595,7 @@ useEffect(() => {
           <Bar
             dataKey="orders"
             name="Paid Orders"
-            fill="#3b82f6"
+            fill="#00C8F0"
             radius={[5, 5, 0, 0]}
           />
         </BarChart>
@@ -614,12 +614,12 @@ useEffect(() => {
                   Revenue by payment method
                 </p>
               </div>
-              <CreditCard className="text-[#245b40]" size={21} />
+              <CreditCard className="text-brand-primary" size={21} />
             </div>
 
             {loading ? (
               <div className="flex h-40 items-center justify-center">
-                <Loader2 className="animate-spin text-[#245b40]" />
+                <Loader2 className="animate-spin text-brand-primary" />
               </div>
             ) : report?.paymentMethods.length ? (
               <div className="space-y-5">
@@ -633,7 +633,7 @@ useEffect(() => {
                     </div>
                     <div className="h-3 overflow-hidden rounded-full bg-slate-100">
                       <div
-                        className="h-full rounded-full bg-[#245b40]"
+                        className="h-full rounded-full bg-brand-button"
                         style={{
                           width: `${(method.amount / maxPayment) * 100}%`,
                         }}
@@ -732,7 +732,7 @@ useEffect(() => {
                       <td className="px-5 py-4">
                         <div className="h-2 w-28 overflow-hidden rounded-full bg-slate-100">
                           <div
-                            className="h-full rounded-full bg-[#245b40]"
+                            className="h-full rounded-full bg-brand-button"
                             style={{
                               width: `${(item.totalRevenue / maxItemRevenue) * 100}%`,
                             }}

@@ -30,7 +30,7 @@ const initialUsers: Record<UserRole, InitialUser> = {
 };
 
 const inputClass =
-  "mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#397653] focus:ring-2 focus:ring-[#397653]/10";
+  "mt-1.5 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-brand-primary outline-none transition placeholder:text-slate-400 focus:border-brand-button focus:ring-2 focus:ring-brand-button/10";
 const labelClass = "text-sm font-medium text-slate-700";
 
 export default function NewOutletPage() {
@@ -188,20 +188,20 @@ export default function NewOutletPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex min-h-20 items-center justify-between border-b border-slate-200 bg-white px-5 py-4 md:px-8">
         <div>
           <button
             type="button"
             onClick={() => router.push("/outlets")}
-            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Back to Outlets
           </button>
           <h1 className="text-xl font-bold">Create New Outlet</h1>
           <p className="mt-1 text-xs text-slate-400">Register a new branch in ByteBill</p>
         </div>
-        <div className="hidden items-center gap-2 rounded-xl bg-[#e8f0e6] px-3 py-2 text-xs font-medium text-[#245b40] sm:flex">
+        <div className="hidden items-center gap-2 rounded-xl bg-brand-highlight/10 px-3 py-2 text-xs font-medium text-brand-primary sm:flex">
           <Store size={16} /> Super Admin
         </div>
       </header>
@@ -221,7 +221,7 @@ export default function NewOutletPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm md:p-7">
             <div className="mb-5 flex items-center gap-3">
-              <div className="rounded-xl bg-[#e8f0e6] p-2.5 text-[#245b40]"><Store size={20} /></div>
+              <div className="rounded-xl bg-brand-highlight/10 p-2.5 text-brand-primary"><Store size={20} /></div>
               <div><h2 className="font-bold">Outlet Information</h2><p className="mt-1 text-xs text-slate-400">Basic details and contact information</p></div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
@@ -270,12 +270,12 @@ export default function NewOutletPage() {
               <div><h2 className="font-bold">Menu Setup</h2><p className="mt-1 text-xs text-slate-400">Choose whether this outlet starts with an existing menu</p></div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <button type="button" onClick={() => { setCopyMenu(false); setSourceOutletId(""); }} className={`rounded-xl border p-4 text-left transition ${!copyMenu ? "border-[#397653] bg-[#f0f6f1] ring-1 ring-[#397653]" : "border-slate-200 hover:bg-slate-50"}`}>
-                <span className="flex items-center justify-between"><span className="font-semibold">No — Start with empty menu</span>{!copyMenu && <CheckCircle2 size={18} className="text-[#245b40]" />}</span>
+              <button type="button" onClick={() => { setCopyMenu(false); setSourceOutletId(""); }} className={`rounded-xl border p-4 text-left transition ${!copyMenu ? "border-brand-button bg-brand-highlight/10 ring-1 ring-brand-button" : "border-slate-200 hover:bg-slate-50"}`}>
+                <span className="flex items-center justify-between"><span className="font-semibold">No — Start with empty menu</span>{!copyMenu && <CheckCircle2 size={18} className="text-brand-primary" />}</span>
                 <span className="mt-1 block text-xs text-slate-500">Recommended default. No categories, items or addons will be copied.</span>
               </button>
-              <button type="button" onClick={() => setCopyMenu(true)} className={`rounded-xl border p-4 text-left transition ${copyMenu ? "border-[#397653] bg-[#f0f6f1] ring-1 ring-[#397653]" : "border-slate-200 hover:bg-slate-50"}`}>
-                <span className="flex items-center justify-between"><span className="font-semibold">Yes — Copy an existing menu</span>{copyMenu && <CheckCircle2 size={18} className="text-[#245b40]" />}</span>
+              <button type="button" onClick={() => setCopyMenu(true)} className={`rounded-xl border p-4 text-left transition ${copyMenu ? "border-brand-button bg-brand-highlight/10 ring-1 ring-brand-button" : "border-slate-200 hover:bg-slate-50"}`}>
+                <span className="flex items-center justify-between"><span className="font-semibold">Yes — Copy an existing menu</span>{copyMenu && <CheckCircle2 size={18} className="text-brand-primary" />}</span>
                 <span className="mt-1 block text-xs text-slate-500">Copies categories, menu items and addons into this new outlet.</span>
               </button>
             </div>
@@ -298,7 +298,7 @@ export default function NewOutletPage() {
             <p className="flex items-center gap-2 text-xs text-slate-500"><MapPin size={15} /> Review the details before creating the outlet.</p>
             <div className="flex gap-3">
               <button type="button" onClick={() => router.push("/outlets")} disabled={submitting} className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50">Cancel</button>
-              <button type="submit" disabled={submitting || loadingOutlets} className="flex items-center justify-center gap-2 rounded-xl bg-[#174b34] px-6 py-3 text-sm font-semibold text-white hover:bg-[#246342] disabled:cursor-not-allowed disabled:opacity-60">
+              <button type="submit" disabled={submitting || loadingOutlets} className="flex items-center justify-center gap-2 rounded-xl bg-brand-button px-6 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:cursor-not-allowed disabled:opacity-60">
                 {submitting ? <Loader2 size={17} className="animate-spin" /> : <Save size={17} />}
                 {submitting ? "Creating Outlet..." : "Create Outlet"}
               </button>

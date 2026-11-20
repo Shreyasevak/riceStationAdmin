@@ -104,12 +104,12 @@ export default function OutletsPage() {
   const activeCount = filteredOutlets.filter((o) => o.isActive).length;
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-5 md:px-8">
         <div>
           <button
             onClick={() => router.push("/")}
-            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Dashboard
           </button>
@@ -126,7 +126,7 @@ export default function OutletsPage() {
           </button>
           <button
             onClick={() => router.push("/outlets/new")}
-            className="flex items-center gap-2 rounded-xl bg-[#174b34] px-4 py-3 text-sm font-semibold text-white hover:bg-[#246342]"
+            className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-3 text-sm font-semibold text-white hover:bg-brand-button/90"
           >
             <Plus size={18} /> Add Outlet
           </button>
@@ -221,7 +221,7 @@ export default function OutletsPage() {
                     <tr key={outlet.id} className="transition hover:bg-slate-50">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f0e6] text-[#245b40]">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-highlight/10 text-brand-primary">
                             <Store size={20} />
                           </div>
                           <div>
@@ -251,7 +251,7 @@ export default function OutletsPage() {
                       <td className="px-5 py-4">
                         <button
                           onClick={() => router.push(`/outlets/${outlet.id}`)}
-                          className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-[#e8f0e6] hover:text-[#245b40]"
+                          className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-brand-highlight/10 hover:text-brand-primary"
                           title="View outlet"
                         >
                           <Eye size={17} />

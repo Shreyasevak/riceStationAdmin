@@ -393,12 +393,12 @@ const currentSelection =
   }
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="sticky top-0 z-10 flex min-h-20 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-3 md:px-8">
         <div>
           <button
             onClick={() => router.push("/")}
-            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Dashboard
           </button>
@@ -420,7 +420,7 @@ const currentSelection =
           <button
             onClick={openAddModal}
             disabled={!selectedOutletId}
-            className="flex items-center gap-2 rounded-xl bg-[#174b34] px-4 py-3 text-sm font-semibold text-white hover:bg-[#246342] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-brand-button px-4 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Plus size={18} /> Add Table
           </button>
@@ -430,7 +430,7 @@ const currentSelection =
       <div className="p-5 md:p-8">
         <section className="mb-6 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
           <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
-            <Store size={17} className="text-[#39714e]" />
+            <Store size={17} className="text-brand-button" />
             Select Outlet
           </div>
 
@@ -438,7 +438,7 @@ const currentSelection =
             value={selectedOutletId}
             onChange={(event) => setSelectedOutletId(event.target.value)}
             disabled={!isSuperAdmin || outlets.length <= 1}
-            className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[#39714e] disabled:bg-slate-50 md:max-w-xl"
+            className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-brand-button disabled:bg-slate-50 md:max-w-xl"
           >
             {outlets.length === 0 && (
               <option value="">No outlet available</option>
@@ -481,7 +481,7 @@ const currentSelection =
               label: "Total Tables",
               value: counts.total,
               icon: Table2,
-              color: "bg-violet-50 text-violet-700",
+              color: "bg-brand-accent/10 text-brand-accent",
             },
             {
               label: "Available",
@@ -652,7 +652,7 @@ const currentSelection =
                       <td className="px-5 py-4">
                         <button
                           onClick={() => openEditModal(table)}
-                          className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-[#e8f0e6] hover:text-[#245b40]"
+                          className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-brand-highlight/10 hover:text-brand-primary"
                           title="Edit table"
                         >
                           <Pencil size={16} />
@@ -719,7 +719,7 @@ const currentSelection =
                       setForm({ ...form, tableNumber: event.target.value })
                     }
                     placeholder="e.g. 1"
-                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#39714e] disabled:bg-slate-50"
+                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button disabled:bg-slate-50"
                   />
                 </div>
 
@@ -736,7 +736,7 @@ const currentSelection =
                     onChange={(event) =>
                       setForm({ ...form, capacity: event.target.value })
                     }
-                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#39714e] disabled:bg-slate-50"
+                    className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button disabled:bg-slate-50"
                   />
                 </div>
               </div>
@@ -751,7 +751,7 @@ const currentSelection =
                     setForm({ ...form, name: event.target.value })
                   }
                   placeholder="e.g. Family Table"
-                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-[#39714e]"
+                  className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-button"
                 />
               </div>
 
@@ -769,7 +769,7 @@ const currentSelection =
                         status: event.target.value as TableForm["status"],
                       })
                     }
-                    className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-[#39714e] disabled:bg-slate-50"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-brand-button disabled:bg-slate-50"
                   >
                     <option value="AVAILABLE">Available</option>
                     <option value="RESERVED">Reserved</option>
@@ -801,7 +801,7 @@ const currentSelection =
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 rounded-xl bg-[#174b34] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#246342] disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:opacity-60"
                 >
                   {saving && <Loader2 size={16} className="animate-spin" />}
                   {editingTable ? "Save Changes" : "Add Table"}

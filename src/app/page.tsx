@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -43,12 +44,12 @@ type Outlet = {
 
 const navigation = [
   { label: "Dashboard", icon: LayoutDashboard },
-  { label: "Orders", icon: ShoppingBag },
+  { label: "Outlets", icon: Store },
   { label: "Menu Management", icon: Utensils },
   { label: "Table Management", icon: Table2 },
+  { label: "Orders", icon: ShoppingBag },
   { label: "User Management", icon: Users },
-  { label: "Outlets", icon: Store },
-  { label: "Payments", icon: Wallet },
+  { label: "Payment & Royalty Management", icon: Wallet },
   { label: "Reports & Analytics", icon: ChartNoAxesCombined },
 ];
 
@@ -151,14 +152,14 @@ const stats = [
     title: "Total Users",
     value: totalUsers,
     icon: Users,
-    color: "bg-blue-50 text-blue-700",
+    color: "bg-brand-highlight/10 text-brand-primary",
     href: "/users",
   },
   {
     title: "Total Tables",
     value: totalTables,
     icon: Table2,
-    color: "bg-violet-50 text-violet-700",
+    color: "bg-brand-accent/10 text-brand-accent",
     href: "/tables",
   },
   {
@@ -172,41 +173,38 @@ const stats = [
 
 
   return (
-    <div className="min-h-screen bg-[#f6f8f7] text-slate-800">
-      <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col bg-[#123b2b] text-white lg:flex">
-        <div className="flex h-20 items-center gap-3 border-b border-white/10 px-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9edbb] text-xl font-black text-[#123b2b]">
-            B
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-wide">BYTEBILL</h1>
-            <p className="text-[10px] tracking-[3px] text-emerald-200">
-              ADMIN PANEL
-            </p>
+    <div className="min-h-screen bg-page-background text-brand-primary">
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col bg-brand-primary text-white lg:flex">
+        <div className="flex h-20 items-center border-b border-white/10 px-4">
+          <div className="flex h-[60px] w-full items-center justify-center rounded-xl bg-white px-2 py-1">
+            <Image
+              src="/bytebill-logo-cropped.png"
+              alt="Bitebill"
+              width={1469}
+              height={402}
+              className="h-full w-full object-contain"
+            />
           </div>
         </div>
 
         <div className="px-5 py-6">
-          <p className="mb-4 px-3 text-[10px] font-semibold uppercase tracking-[2px] text-emerald-200/60">
-            Main Menu
-          </p>
           <nav className="space-y-1">
             {navigation.map((item) => (
               <a
                 key={item.label}
-              href={
-  item.label === "Dashboard" ? "/" :
-  item.label === "Orders" ? "/orders" :
-  item.label === "Menu Management" ? "/menu" :
-  item.label === "Table Management" ? "/tables" :
-  item.label === "User Management" ? "/users" :
-  item.label === "Outlets" ? "/outlets" :
-  item.label === "Payments" ? "/payments" :
-  item.label === "Reports & Analytics" ? "/reports" : "#"
-}
+                href={
+                  item.label === "Dashboard" ? "/" :
+                  item.label === "Outlets" ? "/outlets" :
+                  item.label === "Menu Management" ? "/menu?returnTo=dashboard" :
+                  item.label === "Table Management" ? "/tables" :
+                  item.label === "Orders" ? "/orders" :
+                  item.label === "User Management" ? "/users" :
+                  item.label === "Royalty Management" ? "/payments" :
+                  item.label === "Reports & Analytics" ? "/reports" : "#"
+                }
                 className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${
                   item.label === "Dashboard"
-                    ? "bg-[#d9edbb] font-semibold text-[#123b2b]"
+                    ? "bg-brand-highlight font-semibold text-brand-primary"
                     : "text-emerald-50/80 hover:bg-white/10 hover:text-white"
                 }`}
               >
@@ -220,13 +218,13 @@ const stats = [
         <div className="mt-auto px-5 pb-6">
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
-              <ShieldCheck size={17} className="text-[#d9edbb]" />
+              <ShieldCheck size={17} className="text-brand-highlight" />
               System Settings
             </div>
             <p className="text-xs leading-5 text-emerald-100/60">
               Manage permissions and configuration.
             </p>
-            <p className="mt-3 text-xs font-semibold text-[#d9edbb]">
+            <p className="mt-3 text-xs font-semibold text-brand-highlight">
               Platform administration
             </p>
           </div>
@@ -240,7 +238,7 @@ const stats = [
        <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b border-slate-200 bg-white/95 px-5 backdrop-blur md:px-8">
   <div>
     <p className="text-xs text-slate-400">Pages / Dashboard</p>
-    <h2 className="text-xl font-bold text-slate-800">
+    <h2 className="text-xl font-bold text-brand-primary">
       Dashboard Overview
     </h2>
   </div>
@@ -261,7 +259,7 @@ const stats = [
         onClick={() => setProfileMenuOpen(!profileMenuOpen)}
         className="flex items-center gap-2"
       >
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#e3efdc] font-bold text-[#24533b]">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-highlight/10 font-bold text-brand-primary">
           A
         </div>
 
@@ -303,7 +301,7 @@ const stats = [
             </div>
             {isSuperAdmin && (
   <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
-    <Store size={17} className="text-[#245b40]" />
+    <Store size={17} className="text-brand-primary" />
 
     <select
       value={selectedOutletId}
@@ -347,7 +345,7 @@ const stats = [
 
   router.push(`${stat.href}${query}`);
 }}
-    className="w-full cursor-pointer rounded-2xl border border-slate-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#245b40]"
+    className="w-full cursor-pointer rounded-2xl border border-slate-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand-button"
   >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-500">{stat.title}</span>
@@ -403,7 +401,7 @@ const stats = [
                       </div>
                       <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                         <div
-                          className="h-full rounded-full bg-[#245b40]"
+                          className="h-full rounded-full bg-brand-button"
                           style={{
                             width: `${totalMenuItems ? (outlet._count.menuItems / totalMenuItems) * 100 : 0}%`,
                           }}
@@ -418,23 +416,23 @@ const stats = [
               </div>
             </div>
 
-            <div className="rounded-2xl bg-[#123b2b] p-6 text-white shadow-sm">
+            <div className="rounded-2xl bg-brand-primary p-6 text-white shadow-sm">
               <h4 className="font-semibold">Platform Summary</h4>
-              <p className="mt-7 text-sm text-emerald-100/70">Active outlets</p>
+              <p className="mt-7 text-sm text-brand-highlight/70">Active outlets</p>
               <h3 className="mt-1 text-4xl font-bold">
                 {loading ? "—" : activeOutlets}
               </h3>
               <div className="mt-7 space-y-5">
                 <div className="flex justify-between text-sm">
-                  <span className="text-emerald-100/70">Inactive outlets</span>
+                  <span className="text-brand-highlight/70">Inactive outlets</span>
                   <span>{loading ? "—" : outlets.length - activeOutlets}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-emerald-100/70">Menu items</span>
+                  <span className="text-brand-highlight/70">Menu items</span>
                   <span>{loading ? "—" : totalMenuItems}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-emerald-100/70">Orders recorded</span>
+                  <span className="text-brand-highlight/70">Orders recorded</span>
                   <span>{loading ? "—" : totalOrders}</span>
                 </div>
               </div>

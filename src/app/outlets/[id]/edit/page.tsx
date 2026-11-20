@@ -161,13 +161,13 @@ function EditOutletContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <div className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex min-h-20 items-center justify-between border-b border-slate-200 bg-white px-5 py-4 md:px-8">
         <div>
           <button
             type="button"
             onClick={() => router.push(`/outlets/${outletId}`)}
-            className="mb-2 flex items-center gap-2 text-sm text-slate-400 hover:text-[#245b40]"
+            className="mb-2 flex items-center gap-2 text-sm text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={16} />
             Back to Outlet
@@ -176,7 +176,7 @@ function EditOutletContent() {
           <h1 className="text-xl font-bold">Edit Outlet</h1>
         </div>
 
-        <Store size={25} className="text-[#245b40]" />
+        <Store size={25} className="text-brand-primary" />
       </header>
 
       <main className="mx-auto max-w-5xl p-5 md:p-8">
@@ -235,7 +235,7 @@ function EditOutletContent() {
                       placeholder={field.placeholder}
                       required={field.required}
                       maxLength={field.key === "code" ? 20 : undefined}
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-[#245b40] focus:ring-2 focus:ring-[#245b40]/10"
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-brand-button focus:ring-2 focus:ring-brand-button/10"
                     />
                   </div>
                 ))}
@@ -253,7 +253,7 @@ function EditOutletContent() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 rounded-xl bg-[#245b40] px-6 py-3 text-sm font-semibold text-white hover:bg-[#19452f] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-xl bg-brand-button px-6 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {saving ? (
                     <Loader2 size={17} className="animate-spin" />

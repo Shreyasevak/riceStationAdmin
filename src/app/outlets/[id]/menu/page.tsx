@@ -9,7 +9,7 @@ import {
   type FormEvent,
 } from "react";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import {
   ArrowLeft,
@@ -74,7 +74,9 @@ function ManageMenuContent() {
 
   const params = useParams<{ id: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const outletId = params.id;
+  const returnToDashboard = searchParams.get("returnTo") === "dashboard";
 
   const [outlets, setOutlets] = useState<Outlet[]>([]);
 const [outletsLoading, setOutletsLoading] = useState(true);
@@ -562,16 +564,20 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
 }
 
   return (
-    <div className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <div className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 py-5 md:px-8">
         <div>
           <button
             type="button"
-            onClick={() => router.push(`/outlets/${outletId}`)}
-            className="mb-2 flex items-center gap-2 text-sm text-slate-400 hover:text-[#245b40]"
+            onClick={() =>
+              router.push(
+                returnToDashboard ? "/" : `/outlets/${outletId}`
+              )
+            }
+            className="mb-2 flex items-center gap-2 text-sm text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={16} />
-            Back to Outlet
+            {returnToDashboard ? "Back to Dashboard" : "Back to Outlet"}
           </button>
 
           <h1 className="text-xl font-bold">Manage Menu</h1>
@@ -603,10 +609,12 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
       const selectedOutletId = event.target.value;
 
       if (selectedOutletId && selectedOutletId !== outletId) {
-        router.push(`/outlets/${selectedOutletId}/menu`);
+        router.push(
+          `/outlets/${selectedOutletId}/menu${returnToDashboard ? "?returnTo=dashboard" : ""}`
+        );
       }
     }}
-    className="min-w-[220px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:border-[#245b40]"
+    className="min-w-[220px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:border-brand-button"
   >
     <option value={outletId}>
       {menu?.outlet.name || "Current Outlet"}
@@ -710,7 +718,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                   <button
                     type="button"
                     onClick={() => openCategoryForm()}
-                    className="mb-5 flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white hover:bg-[#19452f]"
+                    className="mb-5 flex items-center gap-2 rounded-xl bg-brand-button px-5 py-3 text-sm font-semibold text-white hover:bg-brand-button/90"
                   >
                     <Plus size={17} />
                     Add Category
@@ -800,7 +808,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                     <div className="space-y-6">
                       {menu.categories.map((category) => (
                         <div key={category.id}>
-                          <h3 className="mb-3 font-bold text-[#245b40]">
+                          <h3 className="mb-3 font-bold text-brand-primary">
                             {category.name}
                           </h3>
 
@@ -872,7 +880,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
       type="button"
       onClick={() => openItemForm()}
       disabled={menu.categories.length === 0}
-      className="mb-6 flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white hover:bg-[#19452f] disabled:cursor-not-allowed disabled:opacity-50"
+      className="mb-6 flex items-center gap-2 rounded-xl bg-brand-button px-5 py-3 text-sm font-semibold text-white hover:bg-brand-button/90 disabled:cursor-not-allowed disabled:opacity-50"
     >
       <Plus size={17} />
       Add Menu Item
@@ -886,7 +894,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
           <div key={category.id}>
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <h3 className="font-bold text-[#245b40]">
+                <h3 className="font-bold text-brand-primary">
                   {category.name}
                 </h3>
                 {!category.isActive && (
@@ -900,7 +908,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                 type="button"
                 onClick={() => openItemForm(undefined, category.id)}
                 disabled={!category.isActive}
-                className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-[#245b40] hover:bg-slate-50 disabled:opacity-40"
+                className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-brand-primary hover:bg-slate-50 disabled:opacity-40"
               >
                 <Plus size={14} />
                 Add to Category
@@ -1047,7 +1055,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
       <button
         type="button"
         onClick={() => openAddonForm()}
-        className="flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white hover:bg-[#19452f]"
+        className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-3 text-sm font-semibold text-white hover:bg-brand-button/90"
       >
         <Plus size={17} />
         Add Add-on
@@ -1079,7 +1087,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                 type="button"
                 onClick={() => openAddonForm(addon)}
                 title="Edit Add-on"
-                className="rounded-lg border border-slate-200 p-2 text-[#245b40] hover:bg-slate-50"
+                className="rounded-lg border border-slate-200 p-2 text-brand-primary hover:bg-slate-50"
               >
                 <Pencil size={17} />
               </button>
@@ -1089,7 +1097,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                 disabled={addonStatusUpdatingId === addon.id}
                 onClick={() => handleAddonStatus(addon, !addon.isActive)}
                 title={addon.isActive ? "Deactivate Add-on" : "Activate Add-on"}
-                className="rounded-lg border border-slate-200 p-2 text-[#245b40] hover:bg-slate-50 disabled:opacity-50"
+                className="rounded-lg border border-slate-200 p-2 text-brand-primary hover:bg-slate-50 disabled:opacity-50"
               >
                 {addonStatusUpdatingId === addon.id ? (
                   <Loader2 size={17} className="animate-spin" />
@@ -1153,7 +1161,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                         name: event.target.value,
                       })
                     }
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
                     placeholder="Enter category name"
                   />
                 </div>
@@ -1171,7 +1179,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                         description: event.target.value,
                       })
                     }
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
                     rows={3}
                     placeholder="Enter description"
                   />
@@ -1192,7 +1200,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                         sortOrder: Number(event.target.value),
                       })
                     }
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
 
@@ -1211,7 +1219,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                   <button
                     type="submit"
                     disabled={categorySaving}
-                    className="flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
                   >
                     {categorySaving && (
                       <Loader2 size={16} className="animate-spin" />
@@ -1266,7 +1274,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                 categoryId: event.target.value,
               })
             }
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-brand-button"
           >
             <option value="">Select category</option>
             {menu?.categories
@@ -1292,7 +1300,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
               setItemForm({ ...itemForm, name: event.target.value })
             }
             placeholder="Enter item name"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
           />
         </div>
 
@@ -1311,7 +1319,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
             }
             rows={3}
             placeholder="Enter item description"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
           />
         </div>
 
@@ -1330,7 +1338,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
               setItemForm({ ...itemForm, price: event.target.value })
             }
             placeholder="Enter price"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
           />
         </div>
 
@@ -1364,7 +1372,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                 isAvailable: event.target.checked,
               })
             }
-            className="h-4 w-4 accent-[#245b40]"
+            className="h-4 w-4 accent-brand-button"
           />
           Available for ordering
         </label>
@@ -1384,7 +1392,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
           <button
             type="submit"
             disabled={itemSaving}
-            className="flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+            className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
           >
             {itemSaving && (
               <Loader2 size={16} className="animate-spin" />
@@ -1441,7 +1449,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                       })
                     }
                     placeholder="Enter add-on name"
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
 
@@ -1460,7 +1468,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                     }
                     rows={3}
                     placeholder="Enter description"
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
 
@@ -1482,7 +1490,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                       })
                     }
                     placeholder="Enter add-on price"
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#245b40]"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-button"
                   />
                 </div>
 
@@ -1502,7 +1510,7 @@ async function handleItemAvailability(item: MenuItem, isAvailable: boolean) {
                   <button
                     type="submit"
                     disabled={addonSaving}
-                    className="flex items-center gap-2 rounded-xl bg-[#245b40] px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl bg-brand-button px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
                   >
                     {addonSaving && (
                       <Loader2 size={16} className="animate-spin" />
@@ -1559,7 +1567,7 @@ function TabButton({
       onClick={onClick}
       className={`rounded-xl px-5 py-3 text-sm font-semibold ${
         active
-          ? "bg-[#245b40] text-white"
+          ? "bg-brand-button text-white"
           : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
       }`}
     >

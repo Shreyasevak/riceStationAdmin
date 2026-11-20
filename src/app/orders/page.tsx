@@ -213,12 +213,12 @@ useEffect(() => {
   }
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-page-background text-brand-primary">
       <header className="flex min-h-20 items-center justify-between border-b border-slate-200 bg-white px-5 py-4 md:px-8">
         <div>
           <button
             onClick={() => router.push("/")}
-            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-[#245b40]"
+            className="mb-1 flex items-center gap-1 text-xs text-slate-400 hover:text-brand-primary"
           >
             <ArrowLeft size={14} /> Dashboard
           </button>
@@ -244,7 +244,7 @@ useEffect(() => {
           <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-500">Total Orders</p>
-              <ShoppingBag className="text-[#245b40]" size={21} />
+              <ShoppingBag className="text-brand-primary" size={21} />
             </div>
             <p className="mt-3 text-3xl font-bold">
               {loading ? "—" : summary.totalOrders}
@@ -306,7 +306,7 @@ useEffect(() => {
 
             <button
               onClick={resetFilters}
-              className="text-sm font-semibold text-[#245b40] hover:underline"
+              className="text-sm font-semibold text-brand-primary hover:underline"
             >
               Clear Filters
             </button>
@@ -316,7 +316,7 @@ useEffect(() => {
             <select
               value={outletId}
               onChange={(e) => setOutletId(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-[#245b40]"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-brand-button"
             >
               <option value="">All Outlets</option>
               {outlets.map((outlet) => (
@@ -329,7 +329,7 @@ useEffect(() => {
             <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-[#245b40]"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-brand-button"
             >
               <option value="">All Cities</option>
               {cities.map((item) => (
@@ -366,7 +366,7 @@ useEffect(() => {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-[#245b40]"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-brand-button"
             >
               <option value="">All Order Status</option>
               <option value="PENDING">Pending</option>
@@ -380,7 +380,7 @@ useEffect(() => {
             <select
               value={paymentStatus}
               onChange={(e) => setPaymentStatus(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-[#245b40]"
+              className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-brand-button"
             >
               <option value="">All Payment Status</option>
               <option value="PAID">Paid</option>
@@ -416,7 +416,7 @@ useEffect(() => {
                 Order records across all registered outlets
               </p>
             </div>
-            <span className="rounded-lg bg-[#e8f0e6] px-3 py-2 text-xs font-semibold text-[#245b40]">
+            <span className="rounded-lg bg-brand-highlight/10 px-3 py-2 text-xs font-semibold text-brand-primary">
               {filteredOrders.length} orders
             </span>
           </div>
@@ -506,7 +506,7 @@ useEffect(() => {
                       </td>
 
                       <td className="px-5 py-4">
-                        <span className="rounded-full bg-[#e8f0e6] px-3 py-1 text-xs font-semibold text-[#245b40]">
+                        <span className="rounded-full bg-brand-highlight/10 px-3 py-1 text-xs font-semibold text-brand-primary">
                           {order.status}
                         </span>
                       </td>

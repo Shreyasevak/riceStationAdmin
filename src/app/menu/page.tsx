@@ -49,6 +49,7 @@ export default function MenuPage() {
         // Use Dashboard-selected outlet, otherwise use the first active outlet.
 const params = new URLSearchParams(window.location.search);
 const dashboardOutletId = params.get("outletId");
+const returnToDashboard = params.get("returnTo") === "dashboard";
 
 const selectedOutlet = dashboardOutletId
   ? outlets.find((outlet) => outlet.id === dashboardOutletId)
@@ -56,7 +57,9 @@ const selectedOutlet = dashboardOutletId
 
 const targetOutlet = selectedOutlet || outlets[0];
 
-router.replace(`/outlets/${targetOutlet.id}/menu`);
+router.replace(
+  `/outlets/${targetOutlet.id}/menu${returnToDashboard ? "?returnTo=dashboard" : ""}`
+);
         // router.replace(`/outlets/${outlets[0].id}/menu`);
       } catch (err) {
         if (mounted) {
@@ -77,7 +80,7 @@ router.replace(`/outlets/${targetOutlet.id}/menu`);
   }, [router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f6f8f7]">
+    <div className="flex min-h-screen items-center justify-center bg-page-background">
       <div className="text-center">
         {error ? (
           <p className="text-sm font-medium text-red-600">{error}</p>
@@ -85,11 +88,11 @@ router.replace(`/outlets/${targetOutlet.id}/menu`);
           <>
             <Utensils
               size={36}
-              className="mx-auto mb-4 text-[#245b40]"
+              className="mx-auto mb-4 text-brand-primary"
             />
             <Loader2
               size={25}
-              className="mx-auto animate-spin text-[#245b40]"
+              className="mx-auto animate-spin text-brand-primary"
             />
             <p className="mt-4 text-sm text-slate-500">
               Loading Menu Management...
